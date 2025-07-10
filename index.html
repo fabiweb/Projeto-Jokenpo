@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Morena Web Jokenpô</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 30px;
+      color: #fcd34d;
+    }
+
+    .botoes {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    button {
+      font-size: 2.5rem;
+      padding: 15px 25px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      background-color: #fcd34d;
+      color: #000;
+    }
+
+    button:hover {
+      background-color: #fde68a;
+      transform: scale(1.1);
+    }
+
+    p {
+      font-size: 1.5rem;
+      margin: 10px 0;
+    }
+
+    .resultado {
+      font-size: 1.8rem;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Jokenpô</h1>
+
+    <div class="botoes">
+      <button data-jogada="tesoura">&#9996;&#65039;</button>
+      <button data-jogada="pedra">&#9994;</button>
+      <button data-jogada="papel">&#128075;</button>
+    </div>
+
+    <p>Sua pontuação: <span id="pontuacao-jogador">0</span></p>
+    <p>Pontuação da Alexa: <span id="pontuacao-alexa">0</span></p>
+
+    <div class="resultado" id="resultado"></div>
+  </div>
+
+  <!-- Sons -->
+  <audio id="som-vitoria" src="https://freesound.org/data/previews/331/331912_3248244-lq.mp3"></audio>
+  <audio id="som-derrota" src="https://www.soundjay.com/button/beep-10.mp3"></audio>
+  <audio id="som-empate" src="https://www.soundjay.com/button/beep-07.mp3"></audio>
+
+  <script>
+    const botoes = document.querySelectorAll("button");
+    const resultado = document.getElementById("resultado");
+    const spanJogador = document.getElementById("pontuacao-jogador");
+    const spanAlexa = document.getElementById("pontuacao-alexa");
+
+    const somVitoria = document.getElementById("som-vitoria");
+    const somDerrota = document.getElementById("som-derrota");
+    const somEmpate = document.getElementById("som-empate");
+
+    let pontosJogador = 0;
+    let pontosAlexa = 0;
+
+    const opcoes = ["pedra", "papel", "tesoura"];
+
+    botoes.forEach(botao => {
+      botao.addEventListener("click", () => {
+        const jogadaJogador = botao.getAttribute("data-jogada");
+        const jogadaAlexa = opcoes[Math.floor(Math.random() * 3)];
+
+        let vencedor = "";
+
+        if (jogadaJogador === jogadaAlexa) {
+          vencedor = "Empate!";
+          somEmpate.play();
+        } else if (
+          (jogadaJogador === "pedra" && jogadaAlexa === "tesoura") ||
+          (jogadaJogador === "papel" && jogadaAlexa === "pedra") ||
+          (jogadaJogador === "tesoura" && jogadaAlexa === "papel")
+        ) {
+          vencedor = "Você ganhou!";
+          pontosJogador++;
+          somVitoria.play();
+        } else {
+          vencedor = "Alexa ganhou!";
+          pontosAlexa++;
+          somDerrota.play();
+        }
+
+        spanJogador.textContent = pontosJogador;
+        spanAlexa.textContent = pontosAlexa;
+        resultado.textContent = `Você: ${jogadaJogador} | Alexa: ${jogadaAlexa} → ${vencedor}`;
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
